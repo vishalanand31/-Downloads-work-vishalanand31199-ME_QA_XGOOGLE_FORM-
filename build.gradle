@@ -18,12 +18,14 @@ repositories {
 }
 
 dependencies {
+    dependencies {
+        implementation 'org.slf4j:slf4j-simple:2.0.9'
 
-    testImplementation 'org.testng:testng:6.9.10'
-
+    testImplementation 'org.testng:testng:7.7.0' // Ensure this matches your desired version
+    implementation 'io.github.bonigarcia:webdrivermanager:5.5.3'
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
     implementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
-
+    }
 }
 
 buildDir = 'build'
@@ -31,7 +33,7 @@ buildDir = 'build'
 test {
     useTestNG() {
         useDefaultListeners = true // generates the test report
-        suites "src/test/resources/testng.xml"
+        suites "src\test\resources\testng.xml"
     }
 
     afterSuite { desc, result ->

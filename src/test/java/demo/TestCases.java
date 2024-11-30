@@ -16,6 +16,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
 
 
 public class TestCases {
@@ -73,7 +74,7 @@ public class TestCases {
         System.out.println("Time:=" +timeFormat.format(currentTime));
         return timeFormat.format(currentTime);
     }
-
+@Test (alwaysRun  = true)
     public  void testCase01() throws InterruptedException{
 
         try {
