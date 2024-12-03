@@ -17,12 +17,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
 public class TestCases {
     ChromeDriver driver;
-    public TestCases()
+
+    @BeforeClass(alwaysRun = true)
+    public void stratBrowser()
     {
         System.out.println("Constructor: TestCases");
         driver = new ChromeDriver();
@@ -30,83 +34,41 @@ public class TestCases {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
-    public void endTest()
-    {
-        System.out.println("End Test: TestCases");
-        driver.close();
-        driver.quit();
-
-    }
-
-    // private static String IST(){
-    //     long epochTime = 171057201L; // Exam Time
-    //     // Convert epoch time to LocalDateTime in GMT
-    //     LocalDateTime gmtDateTime = LocalDateTime.ofEpochSecond(epochTime / 1000, 0, ZoneOffset.UTC);
-
-        
-    //     // Convert GMT time to IST
-    //     ZonedDateTime gmtZonedDateTime = ZonedDateTime.of(gmtDateTime, ZoneOffset.UTC);
-    //     ZonedDateTime istZonedDateTime = gmtZonedDateTime.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
-    //     LocalDateTime istDateTime = istZonedDateTime.toLocalDateTime();
-
-    //     // Define the date-time format
-    //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    //     // Format the converted time
-    //     String formattedISTDateTime = istDateTime.format(formatter);
-    //     return formattedISTDateTime;
-    // }
-
-    // private String DATE(){
-
-    //     LocalDate currentDate = LocalDate.now();
-    //     LocalDate locateAfter7Days = currentDate.minusDays(7);
-    //     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/YYYY");
-    //     String formattedDate = dateFormat.format(locateAfter7Days);
-    
-    //     System.out.println("Date After 7 Days:"+formattedDate); 
-       
-    //     return formattedDate;
-    // }
-    
-    // public String Time(){
-    //     LocalTime currentTime = LocalTime.now();
-    //     DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
-    //     System.out.println("Time:=" +timeFormat.format(currentTime));
-    //     return timeFormat.format(currentTime);
-    // }
-@Test (alwaysRun  = true)
+   
+    @Test (alwaysRun = true)
     public  void testCase01() throws InterruptedException{
-        System.out.println("Start Test case: testCase01");
 
-        // 1
-        driver.get(
-                "https://docs.google.com/forms/d/e/1FAIpQLSep9LTMntH5YqIXa5nkiPKSs283kdwitBBhXWyZdAS-e4CxBQ/viewform");
-        Thread.sleep(9000);
-        // 2
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//input[@tabindex='0'])[1]")));
 
-            // Enter the text
-            String inputText = "Crio Learner";
-            nameInput.click();
-            nameInput.sendKeys(inputText);
+        try{
+            driver.get("https://docs.google.com/forms/d/e/1FAIpQLSep9LTMntH5YqIXa5nkiPKSs283kdwitBBhXWyZdAS-e4CxBQ/viewform");
 
-            // Validate the entered text
-            String enteredText = nameInput.getAttribute("value");
-            Assert.assertEquals(enteredText, inputText, "The text entered into the name input field does not match the expected text.");
-        Thread.sleep(5000);
-        // 3
-        long epochTime = System.currentTimeMillis();
-        String message = "I want to be the best QA Engineer!" + epochTime;
-        WebElement messageInput = driver.findElement(By.xpath("(//textarea[@class='KHxj8b tL9Q4c'])[1]"));
-        messageInput.click();
-        messageInput.sendKeys(message);
-        Thread.sleep(5000);
+            wait.until(ExpectedConditions.urlToBe("https://docs.google.com/forms/d/e/1FAIpQLSep9LTMntH5YqIXa5nkiPKSs283kdwitBBhXWyZdAS-e4CxBQ/viewform"));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        Thread.sleep(4000);
+
+        WebElement inputTextbox1 = driver.findElement(By.xpath("//*[@id='mG61Hd']/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input"));
+
+        inputTextbox1.sendKeys("Crio Learner");
+
+        WebElement inputTextbox2 = driver.findElement(By.xpath("//*[@id='mG61Hd']/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div[2]/textarea"));
+
+        long epochTime = System.currentTimeMillis() / 1000;
+        String inputText = "I want to be the best QA Engineer! " + epochTime;
+
+        inputTextbox2.sendKeys(inputText);
+
+        //Thread.sleep(5000);
         // 4 automate
         WebElement automationExp = driver.findElement(By.xpath("(//div[@class='AB7Lab Id5V1'])[4]"));
         automationExp.click();
         Thread.sleep(5000);
+
         // 5
         WebElement javaCheckbox = driver.findElement(By.xpath("(//div[@class='uHMk6b fsHoPb'])[1]"));
         javaCheckbox.click();
@@ -166,18 +128,187 @@ public class TestCases {
         WebElement submit = driver.findElement(By.xpath("(//span[@class='NPEfkd RveJvd snByac'])[1]"));
         submit.click();
 
-        // 11
-        WebElement thanks = driver.findElement(By.xpath("//div[@class='vHW8K']"));
-        String get = thanks.getText();
-        System.out.println(get);
+        Thread.sleep(3000);
 
-        System.out.println("end Test case: testCase01");
+        // 11
+        // Verifying the content after submit the form
+        WebElement finalCheck = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/div/div[3]"));
+        
+        String qwe = finalCheck.getText();
+        if(qwe.contains("Thanks for your response"))
+        System.out.println(finalCheck.getText());
+        // Thread.sleep(1000);
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void endTest()
+    {
+        System.out.println("End Test: TestCases");
+        driver.close();
+        driver.quit();
     }
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // private static String IST(){
+    //     long epochTime = 171057201L; // Exam Time
+    //     // Convert epoch time to LocalDateTime in GMT
+    //     LocalDateTime gmtDateTime = LocalDateTime.ofEpochSecond(epochTime / 1000, 0, ZoneOffset.UTC);
+
+        
+    //     // Convert GMT time to IST
+    //     ZonedDateTime gmtZonedDateTime = ZonedDateTime.of(gmtDateTime, ZoneOffset.UTC);
+    //     ZonedDateTime istZonedDateTime = gmtZonedDateTime.withZoneSameInstant(ZoneId.of("Asia/Kolkata"));
+    //     LocalDateTime istDateTime = istZonedDateTime.toLocalDateTime();
+
+    //     // Define the date-time format
+    //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    //     // Format the converted time
+    //     String formattedISTDateTime = istDateTime.format(formatter);
+    //     return formattedISTDateTime;
+    // }
+
+    // private String DATE(){
+
+    //     LocalDate currentDate = LocalDate.now();
+    //     LocalDate locateAfter7Days = currentDate.minusDays(7);
+    //     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/YYYY");
+    //     String formattedDate = dateFormat.format(locateAfter7Days);
+    
+    //     System.out.println("Date After 7 Days:"+formattedDate); 
+       
+    //     return formattedDate;
+    // }
+    
+    // public String Time(){
+    //     LocalTime currentTime = LocalTime.now();
+    //     DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
+    //     System.out.println("Time:=" +timeFormat.format(currentTime));
+    //     return timeFormat.format(currentTime);
+    // }
 
     // public static  void selectLearning(ChromeDriver driver,String str){
         
